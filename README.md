@@ -13,3 +13,6 @@ features:
 limitations:
 - file contents must be sorted chronologically
 - cannot open compressed files
+- inaccuracies by logging program ignored
+- if logs come from multiple machines, user must ensure they are synchronized
+- output will be converted to Zulu time (GMT+0)
