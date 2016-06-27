@@ -1,0 +1,4 @@
+2016-06-02 20:45:28.166 2051 INFO nova.compute.resource_tracker [req-4be9d975-1973-4e93-b7b1-32fb4adb2ed3 - - - - -] Total usable vcpus: 2, total allocated vcpus: 0
+2016-06-02 20:45:28.167 2051 INFO nova.compute.resource_tracker [req-4be9d975-1973-4e93-b7b1-32fb4adb2ed3 - - - - -] Final resource view: name=d52-54-77-77-77-04.vc4.cloud.suse.de phys_ram=2509MB used_ram=512MB phys_disk=17GB used_disk=0GB total_vcpus=2 used_vcpus=0 pci_stats=None
+2016-06-02 20:45:28.209 2051 INFO nova.compute.resource_tracker [req-4be9d975-1973-4e93-b7b1-32fb4adb2ed3 - - - - -] Compute_service record updated for d52-54-77-77-77-04:d52-54-77-77-77-04.vc4.cloud.suse.de
+

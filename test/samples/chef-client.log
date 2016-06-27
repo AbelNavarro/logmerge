@@ -1,0 +1,4 @@
+[2016-06-02T19:58:58+00:00] INFO: Removing cookbooks/ipmi/resources/load.rb from the cache; its cookbook is no longer needed on this client.
+[2016-06-02T19:58:58+00:00] INFO: Removing cookbooks/ipmi/resources/bmc_command.rb from the cache; its cookbook is no longer needed on this client.
+[2016-06-02T19:58:58+00:00] INFO: Removing cookbooks/ipmi/resources/unload.rb from the cache; its cookbook is no longer needed on this client.
+

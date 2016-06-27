@@ -1,0 +1,4 @@
+2016-06-27T06:00:11.386456+00:00 d52-54-77-77-77-01 systemd[1]: Starting Session c137556 of user postgres.
+2016-06-27T06:00:11.386740+00:00 d52-54-77-77-77-01 systemd[1]: Started Session c137556 of user postgres.
+2016-06-27T06:00:11.391525+00:00 d52-54-77-77-77-01 su: pam_unix(su:session): session closed for user postgres
+

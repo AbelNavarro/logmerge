@@ -1,0 +1,4 @@
+Jun 26 06:00:22 [13084] d52-54-77-77-77-01    pengine:     info: determine_online_status_fencing:       Node d52-54-77-77-77-01 is active
+Jun 26 06:00:22 [13084] d52-54-77-77-77-01    pengine:     info: determine_online_status:       Node d52-54-77-77-77-01 is online
+Jun 26 06:00:22 [13084] d52-54-77-77-77-01    pengine:     info: determine_online_status_fencing:       Node d52-54-77-77-77-02 is active
+

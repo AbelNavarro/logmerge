@@ -1,0 +1,4 @@
+2016-06-02T20:39:51.876Z|00001|vlog|INFO|opened log file /var/log/openvswitch/ovs-vswitchd.log
+2016-06-02T20:39:51.888Z|00002|reconnect|INFO|unix:/var/run/openvswitch/db.sock: connecting...
+2016-06-02T20:39:51.888Z|00003|reconnect|INFO|unix:/var/run/openvswitch/db.sock: connected
+
