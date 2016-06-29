@@ -53,6 +53,13 @@ def get_dateread(line):
         dt = datetime.datetime.strptime(line[:15], '%b %d %H:%M:%S')
         return dt.replace(year=datetime.date.today().year)
 
+    if datetype == 'messages':
+        return datetime.datetime.strptime(line[:26], '%Y-%m-%dT%H:%M:%S.%f')
+
+    if datetype == 'chefclient':
+        return datetime.datetime.strptime(line[:20], '[%Y-%m-%dT%H:%M:%S')
+
+
 def main():
     res = parse_args(sys.argv[1:])
 
