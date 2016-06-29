@@ -2,6 +2,7 @@
 
 import argparse
 import sys
+import re
 
 def parse_args(args):
     parser = argparse.ArgumentParser(
@@ -13,10 +14,18 @@ def parse_args(args):
 
 
 def get_dateformat(line):
-    if '2016' in line:
-        return 'type 1'
-    else:
-        return 'type 2'
+    if line.startswith('['):
+        return 'chefclient'
+    
+    months = ['Jan', 'Feb', 'Mar', 'Apr', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    if line[:3] in months:
+        return 'pacemaker'
+
+    match = re.match(r'[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{3}', line)
+    if match:
+        return 'nova'
+
+    return 'unknown'
 
 
 

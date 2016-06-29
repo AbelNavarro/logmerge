@@ -33,7 +33,7 @@ class TestDateformat(unittest.TestCase):
 
 
     def test_novacompute(self):
-        res = get_dateformat('2016-06-02 20:45:28.166 2051')
+        res = get_dateformat('2016-06-02 20:45:28.166 0000')
         print res
 
 
