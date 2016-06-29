@@ -14,6 +14,9 @@ def parse_args(args):
 
 
 def get_dateformat(line):
+    if not line:
+        return 'empty'
+
     if line.startswith('['):
         return 'chefclient'
     
@@ -24,6 +27,14 @@ def get_dateformat(line):
     match = re.match(r'[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{3}', line)
     if match:
         return 'nova'
+
+    match = re.match(r'[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{3}Z', line)
+    if match:
+        return 'ovs'
+
+    match = re.match(r'[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{6}\+[0-9]{2}:[0-9]{2}', line)
+    if match:
+        return 'messages'
 
     return 'unknown'
 
