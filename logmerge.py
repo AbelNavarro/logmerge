@@ -60,6 +60,27 @@ def get_dateread(line):
         return datetime.datetime.strptime(line[:20], '[%Y-%m-%dT%H:%M:%S')
 
 
+class LogFile:
+    def __init__(self, file):
+        self.file = file
+        self.datetime = datetime.datetime.min
+        self.line = ''
+
+    def update(self):
+        self.line = self.file.readline()
+        self.datetime = get_dateread(self.line)
+        while self.line and self.datetime is None:
+            self.line = self.file.readline()
+            self.datetime = get_dateread(self.line)
+
+
+    def output(self):
+        print self.line.rstrip()
+
+    def has_lines(self):
+        return self.line
+
+
 def main():
     res = parse_args(sys.argv[1:])
 
@@ -72,11 +93,18 @@ def main():
         return 1
    
     files = []
-    for file in res.files:
-        files.append(open(file, 'r'))
+    for filename in res.files:
+        file = LogFile(open(filename, 'r'))
+        file.update()
+        files.append(file)
 
-    for file in files:
-        print file.readline()
+    while files:
+        files = sorted(files, key=lambda logfile: logfile.datetime)
+        files[0].output()
+        files[0].update()
+        if not files[0].has_lines():
+            del files[0]
+            print 'deleted file'
 
 
 if __name__ == '__main__':
