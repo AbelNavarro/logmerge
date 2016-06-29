@@ -76,6 +76,7 @@ class LogFile:
 
     def output(self):
         print self.line.rstrip()
+        self.update()
 
     def has_lines(self):
         return self.line
@@ -101,7 +102,6 @@ def main():
     while files:
         files = sorted(files, key=lambda logfile: logfile.datetime)
         files[0].output()
-        files[0].update()
         if not files[0].has_lines():
             del files[0]
             print 'deleted file'
