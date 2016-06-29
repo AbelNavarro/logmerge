@@ -12,6 +12,14 @@ def parse_args(args):
     return parser.parse_args(args)
 
 
+def get_dateformat(line):
+    if '2016' in line:
+        return 'type 1'
+    else:
+        return 'type 2'
+
+
+
 def main():
     res = parse_args(sys.argv[1:])
 
