@@ -20,4 +20,6 @@ TODO:
 - can add line number to output
 
 Sample usage:
+```
 $ find . -name *.log | xargs logmerge.py
+```
