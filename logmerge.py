@@ -3,6 +3,8 @@
 import argparse
 import sys
 import re
+import datetime
+
 
 def parse_args(args):
     parser = argparse.ArgumentParser(
@@ -38,6 +40,12 @@ def get_dateformat(line):
 
     return 'unknown'
 
+
+def get_dateread(line):
+    datetype = get_dateformat(line)
+    if datetype == 'nova':
+        dt1 = datetime.datetime.strptime(line[:23], '%Y-%m-%d %H:%M:%S.%f')
+        return dt1
 
 
 def main():
