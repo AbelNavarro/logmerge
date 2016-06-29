@@ -44,9 +44,14 @@ def get_dateformat(line):
 def get_dateread(line):
     datetype = get_dateformat(line)
     if datetype == 'nova':
-        dt1 = datetime.datetime.strptime(line[:23], '%Y-%m-%d %H:%M:%S.%f')
-        return dt1
+        return datetime.datetime.strptime(line[:23], '%Y-%m-%d %H:%M:%S.%f')
 
+    if datetype == 'ovs':
+        return datetime.datetime.strptime(line[:23], '%Y-%m-%dT%H:%M:%S.%f')
+
+    if datetype == 'pacemaker':
+        dt = datetime.datetime.strptime(line[:15], '%b %d %H:%M:%S')
+        return dt.replace(year=datetime.date.today().year)
 
 def main():
     res = parse_args(sys.argv[1:])
