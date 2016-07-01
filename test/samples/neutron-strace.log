@@ -1,0 +1,7 @@
+2016-06-02 20:32:22.325 1962 INFO neutron.common.config [-] Logging enabled!
+2016-06-02 20:42:22.326 1962 INFO neutron.common.config [-] /usr/bin/neutron-openvswitch-agent version 7.0.5.dev138
+Simulated stack trace. First line.
+    - Second line
+
+2016-06-02 20:42:24.759 1962 INFO neutron.agent.l2.extensions.manager [req-e2357784-bd50-456d-b132-30e3466b040c - - - - -] Loaded agent extensions: []
+
