@@ -10,7 +10,7 @@ class TestArgparse(unittest.TestCase):
 
     def test_empty(self):
         res = parse_args([])
-        self.assertEquals(res, argparse.Namespace())
+        self.assertEquals(res, argparse.Namespace(print_filename=False, print_linenum=False))
 
 
     def test_onefile(self):
