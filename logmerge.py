@@ -24,12 +24,13 @@ class LogFile:
         if not line:
             return 'empty'
 
-        if line.startswith('['):
-            days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-            if line[1:4] in days:
-                return 'apache'
-            else:
-               return 'chefclient'
+        days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        if line[1:4] in days:
+           return 'apache'
+           
+        match = re.match(r'[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\+[0-9]{2}:[0-9]{2}', line[1:26])
+        if match:
+           return 'chefclient'
         
         months = ['Jan', 'Feb', 'Mar', 'Apr', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
         if line[:3] in months:
