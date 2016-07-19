@@ -43,3 +43,8 @@ class TestDateread(unittest.TestCase):
     def test_crowbar_production(self):
         res = LogFile.get_dateread('I, [2016-07-12T13:45:20.130379 #2515:0x007fccab486f28]')
         self.assertEquals(res, datetime.datetime(2016, 07, 12, 13, 45, 20, 130379))
+
+    def test_crowbar_join(self):
+        res = LogFile.get_dateread('2016-07-18 08:11:56 -0700')
+        self.assertEquals(res, datetime.datetime(2016, 07, 18, 8, 11, 56, 000000))
+

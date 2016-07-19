@@ -52,6 +52,10 @@ class LogFile:
         if match:
             return 'crowbar-production'
 
+        match = re.match(r'[[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2} .[0-9]{4}', line)
+        if match:
+            return 'crowbar-join'
+
         return 'unknown'
 
 
@@ -83,6 +87,9 @@ class LogFile:
         if datetype == 'crowbar-production':
             return datetime.datetime.strptime(line[4:30], '%Y-%m-%dT%H:%M:%S.%f')
 
+        if datetype == 'crowbar-join':
+            return datetime.datetime.strptime(line[:19], '%Y-%m-%d %H:%M:%S')
+
 
     def __init__(self, file):
         self.file = file
@@ -105,7 +112,8 @@ class LogFile:
                 self.linenum += 1
                 break
             else:
-                print "Found unknown date format in: {}:{}".format(self.file.name, self.linenum)
+                print "Found unknown date format in: {}".format(self.file.name)
+                break
 
 
     def output(self, print_filename=False, print_linenum=False):
