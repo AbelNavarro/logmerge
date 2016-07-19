@@ -19,76 +19,86 @@ def parse_args(args):
 
 
 class LogFile:
-    @staticmethod
-    def get_dateformat(line):
-        if not line:
-            return 'empty'
 
-        days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        if line[1:4] in days:
-            return 'apache'
-           
-        match = re.match(r'[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{2}:[0-9]{2}', line[1:26])
-        if match:
-            return 'chefclient'
- 
-        months = ['Jan', 'Feb', 'Mar', 'Apr', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-        if line[:3] in months:
-            return 'pacemaker'
+    class DateReader:
+        def __init__(self):
+            self.func = None
 
-        match = re.match(r'[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{3}', line)
-        if match:
-            return 'nova'
+        def get(self, line):
+            if not self.func:
+                self.func = self._get_dateformat(line)
 
-        match = re.match(r'[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{3}Z', line)
-        if match:
-            return 'ovs'
+            if self.func:
+                try:
+                    return self.func(line)
+                except ValueError:
+                    return None
 
-        match = re.match(r'[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{6}\+[0-9]{2}:[0-9]{2}', line)
-        if match:
-            return 'messages'
-
-        match = re.match(r'[ID], \[[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{6}', line)
-        if match:
-            return 'crowbar-production'
-
-        match = re.match(r'[[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2} .[0-9]{4}', line)
-        if match:
-            return 'crowbar-join'
-
-        return 'unknown'
-
-
-    @staticmethod
-    def get_dateread(line):
-        datetype = LogFile.get_dateformat(line)
-        if datetype == 'unknown':
             return None
 
-        if datetype == 'nova':
+        def _nova(self, line):
             return datetime.datetime.strptime(line[:23], '%Y-%m-%d %H:%M:%S.%f')
 
-        if datetype == 'ovs':
+        def _ovs(self, line):
             return datetime.datetime.strptime(line[:23], '%Y-%m-%dT%H:%M:%S.%f')
 
-        if datetype == 'pacemaker':
+        def _pacemaker(self, line):
             dt = datetime.datetime.strptime(line[:15], '%b %d %H:%M:%S')
             return dt.replace(year=datetime.date.today().year)
 
-        if datetype == 'messages':
+        def _messages(self, line):
             return datetime.datetime.strptime(line[:26], '%Y-%m-%dT%H:%M:%S.%f')
 
-        if datetype == 'chefclient':
+        def _chefclient(self, line):
             return datetime.datetime.strptime(line[:20], '[%Y-%m-%dT%H:%M:%S')
 
-        if datetype == 'apache':
+        def _apache(self, line):
             return datetime.datetime.strptime(line[5:32], '%b %d %H:%M:%S.%f %Y')
 
-        if datetype == 'crowbar-production':
+        def _crowbar_production(self, line):
             return datetime.datetime.strptime(line[4:30], '%Y-%m-%dT%H:%M:%S.%f')
 
-        if datetype == 'crowbar-join':
+        def _crowbar_join(self, line):
             return datetime.datetime.strptime(line[:19], '%Y-%m-%d %H:%M:%S')
+
+        def _get_dateformat(self, line):
+            if not line:
+                return None
+
+            days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            if line[1:4] in days:
+                return self._apache
+               
+            match = re.match(r'[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{2}:[0-9]{2}', line[1:26])
+            if match:
+                return self._chefclient
+     
+            months = ['Jan', 'Feb', 'Mar', 'Apr', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            if line[:3] in months:
+                return self._chefclient
+
+            match = re.match(r'[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{3}', line)
+            if match:
+                return self._nova
+
+            match = re.match(r'[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{3}Z', line)
+            if match:
+                return self._ovs
+
+            match = re.match(r'[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{6}\+[0-9]{2}:[0-9]{2}', line)
+            if match:
+                return self._messages
+
+            match = re.match(r'[ID], \[[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{6}', line)
+            if match:
+                return self._crowbar_production
+
+            match = re.match(r'[[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2} .[0-9]{4}', line)
+            if match:
+                return self._crowbar_join
+
+            return None
+
 
 
     def __init__(self, file):
@@ -96,6 +106,7 @@ class LogFile:
         self.datetime = datetime.datetime.min
         self.line = ''
         self.linenum = 0
+        self.dateread = self.DateReader()
 
     def update(self):
         self.line = ''
@@ -106,7 +117,7 @@ class LogFile:
 
             self.line += tmpline
 
-            tmpdatetime = LogFile.get_dateread(tmpline)
+            tmpdatetime = self.dateread.get(tmpline)
             if tmpdatetime is not None:
                 self.datetime = tmpdatetime
                 self.linenum += 1
