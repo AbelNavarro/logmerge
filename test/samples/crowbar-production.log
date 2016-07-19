@@ -1,0 +1,4 @@
+I, [2016-07-12T13:45:20.182868 #2515:0x007fccab486f28]  INFO -- Completed 200 OK in 52ms (Views: 0.8ms | ActiveRecord: 0.5ms)
+I, [2016-07-12T13:45:50.270794 #2515:0x007fccaadf42f0]  INFO -- Started GET "/crowbar/openstack/1.0/proposals/status" for 127.0.0.1 at 2016-07-12 13:45:50 -0700
+I, [2016-07-12T13:45:50.273094 #2515:0x007fccaadf42f0]  INFO -- Processing by OpenstackController#proposal_status as JSON
+

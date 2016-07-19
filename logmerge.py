@@ -48,6 +48,10 @@ class LogFile:
         if match:
             return 'messages'
 
+        match = re.match(r'[ID], \[[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{6}', line)
+        if match:
+            return 'crowbar-production'
+
         return 'unknown'
 
 
@@ -75,6 +79,9 @@ class LogFile:
 
         if datetype == 'apache':
             return datetime.datetime.strptime(line[5:32], '%b %d %H:%M:%S.%f %Y')
+
+        if datetype == 'crowbar-production':
+            return datetime.datetime.strptime(line[4:30], '%Y-%m-%dT%H:%M:%S.%f')
 
 
     def __init__(self, file):

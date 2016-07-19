@@ -40,3 +40,8 @@ class TestDateformat(unittest.TestCase):
     def test_pacemaker(self):
         res = LogFile.get_dateformat('Jun 26 06:00:22 [13084]')
         self.assertEquals(res, 'pacemaker')
+
+
+    def test_crowbar_production(self):
+        res = LogFile.get_dateformat('I, [2016-07-12T13:45:20.128115 #2515:0x007fccab486f28]')
+        self.assertEquals(res, 'crowbar-production')

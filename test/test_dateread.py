@@ -39,3 +39,7 @@ class TestDateread(unittest.TestCase):
     def test_apache(self):
         res = LogFile.get_dateread('[Wed Jun 22 15:12:20.427073 2016] [wsgi:error]')
         self.assertEquals(res, datetime.datetime(2016, 06, 22, 15, 12, 20, 427073))
+
+    def test_crowbar_production(self):
+        res = LogFile.get_dateread('I, [2016-07-12T13:45:20.130379 #2515:0x007fccab486f28]')
+        self.assertEquals(res, datetime.datetime(2016, 07, 12, 13, 45, 20, 130379))
