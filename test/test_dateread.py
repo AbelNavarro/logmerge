@@ -35,3 +35,7 @@ class TestDateread(unittest.TestCase):
     def test_pacemaker(self):
         res = LogFile.get_dateread('Jun 26 06:00:22 [13084]')
         self.assertEquals(res, datetime.datetime(2016, 06, 26, 06, 00, 22, 000000))
+
+    def test_apache(self):
+        res = LogFile.get_dateread('[Wed Jun 22 15:12:20.427073 2016] [wsgi:error]')
+        self.assertEquals(res, datetime.datetime(2016, 06, 22, 15, 12, 20, 427073))

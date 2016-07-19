@@ -25,7 +25,11 @@ class LogFile:
             return 'empty'
 
         if line.startswith('['):
-            return 'chefclient'
+            days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            if line[1:4] in days:
+                return 'apache'
+            else:
+               return 'chefclient'
         
         months = ['Jan', 'Feb', 'Mar', 'Apr', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
         if line[:3] in months:
@@ -64,6 +68,9 @@ class LogFile:
 
         if datetype == 'chefclient':
             return datetime.datetime.strptime(line[:20], '[%Y-%m-%dT%H:%M:%S')
+
+        if datetype == 'apache':
+            return datetime.datetime.strptime(line[5:32], '%b %d %H:%M:%S.%f %Y')
 
 
     def __init__(self, file):
