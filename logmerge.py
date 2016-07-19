@@ -123,7 +123,7 @@ class LogFile:
                 self.linenum += 1
                 break
             else:
-                print "Found unknown date format in: {}:{}".format(self.file.name, self.linenum)
+                #print "Found unknown date format in: {}:{}".format(self.file.name, self.linenum)
                 break
 
 
