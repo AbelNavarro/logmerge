@@ -54,6 +54,9 @@ class LogFile:
     @staticmethod
     def get_dateread(line):
         datetype = LogFile.get_dateformat(line)
+        if datetype == 'unknown':
+            return None
+
         if datetype == 'nova':
             return datetime.datetime.strptime(line[:23], '%Y-%m-%d %H:%M:%S.%f')
 
@@ -94,6 +97,8 @@ class LogFile:
                 self.datetime = tmpdatetime
                 self.linenum += 1
                 break
+            else:
+                print "Found unknown date format in: {}:{}".format(self.file.name, self.linenum)
 
 
     def output(self, print_filename=False, print_linenum=False):
