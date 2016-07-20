@@ -36,30 +36,6 @@ class LogFile:
 
             return None
 
-        def _nova(self, line):
-            return datetime.datetime.strptime(line[:23], '%Y-%m-%d %H:%M:%S.%f')
-
-        def _ovs(self, line):
-            return datetime.datetime.strptime(line[:23], '%Y-%m-%dT%H:%M:%S.%f')
-
-        def _pacemaker(self, line):
-            dt = datetime.datetime.strptime(line[:15], '%b %d %H:%M:%S')
-            return dt.replace(year=datetime.date.today().year)
-
-        def _messages(self, line):
-            return datetime.datetime.strptime(line[:26], '%Y-%m-%dT%H:%M:%S.%f')
-
-        def _chefclient(self, line):
-            return datetime.datetime.strptime(line[:20], '[%Y-%m-%dT%H:%M:%S')
-
-        def _apache(self, line):
-            return datetime.datetime.strptime(line[5:32], '%b %d %H:%M:%S.%f %Y')
-
-        def _crowbar_production(self, line):
-            return datetime.datetime.strptime(line[4:30], '%Y-%m-%dT%H:%M:%S.%f')
-
-        def _crowbar_join(self, line):
-            return datetime.datetime.strptime(line[:19], '%Y-%m-%d %H:%M:%S')
 
         def _get_dateformat(self, line):
             if not line:
@@ -67,35 +43,52 @@ class LogFile:
 
             days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
             if line[1:4] in days:
-                return self._apache
+                def _apache(line):
+                    return datetime.datetime.strptime(line[5:32], '%b %d %H:%M:%S.%f %Y')
+                return _apache
                
             match = re.match(r'[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{2}:[0-9]{2}', line[1:26])
             if match:
-                return self._chefclient
+                def _chefclient(line):
+                    return datetime.datetime.strptime(line[:20], '[%Y-%m-%dT%H:%M:%S')
+                return _chefclient
      
             months = ['Jan', 'Feb', 'Mar', 'Apr', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
             if line[:3] in months:
-                return self._chefclient
+                def _pacemaker(line):
+                    dt = datetime.datetime.strptime(line[:15], '%b %d %H:%M:%S')
+                    return dt.replace(year=datetime.date.today().year)
+                return _pacemaker
 
             match = re.match(r'[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{3}', line)
             if match:
-                return self._nova
+                def _nova(line):
+                    return datetime.datetime.strptime(line[:23], '%Y-%m-%d %H:%M:%S.%f')
+                return _nova
 
             match = re.match(r'[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{3}Z', line)
             if match:
-                return self._ovs
+                def _ovs(line):
+                    return datetime.datetime.strptime(line[:23], '%Y-%m-%dT%H:%M:%S.%f')
+                return _ovs
 
             match = re.match(r'[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{6}\+[0-9]{2}:[0-9]{2}', line)
             if match:
-                return self._messages
+                def _messages(line):
+                    return datetime.datetime.strptime(line[:26], '%Y-%m-%dT%H:%M:%S.%f')
+                return _messages
 
             match = re.match(r'[ID], \[[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{6}', line)
             if match:
-                return self._crowbar_production
+                def _crowbar_production(line):
+                    return datetime.datetime.strptime(line[4:30], '%Y-%m-%dT%H:%M:%S.%f')
+                return _crowbar_production
 
             match = re.match(r'[[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2} .[0-9]{4}', line)
             if match:
-                return self._crowbar_join
+                def _crowbar_join(line):
+                    return datetime.datetime.strptime(line[:19], '%Y-%m-%d %H:%M:%S')
+                return _crowbar_join
 
             return None
 
