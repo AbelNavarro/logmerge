@@ -123,7 +123,10 @@ class LogFile:
     def output(self, print_filename=False, print_linenum=False):
         outstr = ''
         if print_filename:
-            outstr += self.file.name.rsplit('/', 1)[-1] + " "
+            filename = self.file.name.rsplit('/', 1)[-1] + " "
+            if len(filename) > 8:
+                filename = filename[:7] + '+'
+            outstr += "{:<8} ".format(filename)
             
         if print_linenum and self.line:
             outstr += "{} ".format(self.linenum)
