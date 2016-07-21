@@ -12,7 +12,7 @@ def parse_args(args):
             argument_default=argparse.SUPPRESS)
     parser.add_argument('files', nargs='*', help='files to merge')
     parser.add_argument('-v', '--verbose', help='increase verbosity', action='count')
-    parser.add_argument('-f', '--print_filename', help='print filename', action='store_true', default=False)
+    parser.add_argument('-f', '--print_filename', type=int, help='print filename (printout length)')
     parser.add_argument('-l', '--print_linenum', help='print line number', action='store_true', default=False)
     return parser.parse_args(args)
 
@@ -120,13 +120,13 @@ class LogFile:
                 break
 
 
-    def output(self, print_filename=False, print_linenum=False):
+    def output(self, filename_length, print_linenum=False):
         outstr = ''
-        if print_filename:
+        if filename_length > 0:
             filename = self.file.name.rsplit('/', 1)[-1] + " "
-            if len(filename) > 8:
-                filename = filename[:7] + '+'
-            outstr += "{:<8} ".format(filename)
+            if len(filename) > filename_length:
+                filename = filename[:(filename_length - 1)] + '+'
+            outstr += "{:<{}} ".format(filename, filename_length)
             
         if print_linenum and self.line:
             outstr += "{} ".format(self.linenum)
@@ -159,7 +159,11 @@ def main():
 
     while files:
         files = sorted(files, key=lambda logfile: logfile.datetime)
-        files[0].output(res.print_filename, res.print_linenum)
+	filename_length = 0
+        if 'print_filename' in res:
+            filename_length = res.print_filename
+
+        files[0].output(filename_length, res.print_linenum)
         if not files[0].has_lines():
             del files[0]
 
