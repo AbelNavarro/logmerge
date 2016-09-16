@@ -90,6 +90,12 @@ class LogFile:
                     return datetime.datetime.strptime(line[:19], '%Y-%m-%d %H:%M:%S')
                 return _crowbar_join
 
+            match = re.match(r'[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{2}:[0-9]{2}', line)
+            if match:
+                def _node(line):
+                    return datetime.datetime.strptime(line[:19], '%Y-%m-%dT%H:%M:%S')
+                return _node
+
             return None
 
 
