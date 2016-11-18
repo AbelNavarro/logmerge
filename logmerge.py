@@ -165,7 +165,7 @@ def main():
 
     while files:
         files = sorted(files, key=lambda logfile: logfile.datetime)
-	filename_length = 0
+        filename_length = 0
         if 'print_filename' in res:
             filename_length = res.print_filename
 
