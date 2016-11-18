@@ -6,48 +6,45 @@ from logmerge import LogFile
 
 
 class TestDateformat(unittest.TestCase):
+    def setUp(self):
+        self.datereader = LogFile.DateReader()
+
+    def assertDateReader(self, string, function_name):
+        reader = self.datereader._get_dateformat(string)
+        self.assertEquals(reader.__name__, function_name)
 
     def test_empty(self):
-        res = LogFile.get_dateformat('')
-        self.assertEquals(res, 'empty')
-
+        reader = self.datereader._get_dateformat('')
+        self.assertIsNone(reader)
 
     def test_ovs(self):
-        res = LogFile.get_dateformat('2016-06-02T20:39:51.876Z|')
-        self.assertEquals(res, 'ovs')
+        self.assertDateReader('2016-06-02T20:39:51.876Z|', '_ovs')
 
 
     def test_neutron(self):
-        res = LogFile.get_dateformat('2016-06-02 20:42:23.325 0000')
-        self.assertEquals(res, 'nova')
+        self.assertDateReader('2016-06-02 20:42:23.325 0000', '_nova')
 
 
     def test_chefclient(self):
-        res = LogFile.get_dateformat('[2016-06-02T19:58:58+00:00] INFO')
-        self.assertEquals(res, 'chefclient')
+        self.assertDateReader('[2016-06-02T19:58:58+00:00] INFO', '_chefclient')
 
 
     def test_messages(self):
-        res = LogFile.get_dateformat('2016-06-27T06:00:11.386456+00:00 hostname')
-        self.assertEquals(res, 'messages')
+        self.assertDateReader('2016-06-27T06:00:11.386456+00:00 hostname', '_messages')
 
 
     def test_novacompute(self):
-        res = LogFile.get_dateformat('2016-06-02 20:45:28.166 0000')
-        self.assertEquals(res, 'nova')
+        self.assertDateReader('2016-06-02 20:45:28.166 0000', '_nova')
 
 
     def test_pacemaker(self):
-        res = LogFile.get_dateformat('Jun 26 06:00:22 [13084]')
-        self.assertEquals(res, 'pacemaker')
+        self.assertDateReader('Jun 26 06:00:22 [13084]', '_pacemaker')
 
 
     def test_crowbar_production(self):
-        res = LogFile.get_dateformat('I, [2016-07-12T13:45:20.128115 #2515:0x007fccab486f28]')
-        self.assertEquals(res, 'crowbar-production')
+        self.assertDateReader('I, [2016-07-12T13:45:20.128115 #2515:0x007fccab486f28]', '_crowbar_production')
 
 
     def test_crowbar_join(self):
-        res = LogFile.get_dateformat('2016-07-18 08:11:56 -0700')
-        self.assertEquals(res, 'crowbar-join')
+        self.assertDateReader('2016-07-18 08:11:56 -0700', '_crowbar_join')
 
