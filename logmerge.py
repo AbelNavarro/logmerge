@@ -46,13 +46,13 @@ class LogFile:
                 def _apache(line):
                     return datetime.datetime.strptime(line[5:32], '%b %d %H:%M:%S.%f %Y')
                 return _apache
-               
+
             match = re.match(r'[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}.[0-9]{2}:[0-9]{2}', line[1:26])
             if match:
                 def _chefclient(line):
                     return datetime.datetime.strptime(line[:20], '[%Y-%m-%dT%H:%M:%S')
                 return _chefclient
-     
+
             months = ['Jan', 'Feb', 'Mar', 'Apr', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
             if line[:3] in months:
                 def _pacemaker(line):
@@ -133,7 +133,7 @@ class LogFile:
             if len(filename) > filename_length:
                 filename = filename[:(filename_length - 1)] + '+'
             outstr += "{:<{}} ".format(filename, filename_length)
-            
+
         if print_linenum and self.line:
             outstr += "{} ".format(self.linenum)
 
@@ -152,11 +152,11 @@ def main():
     if res == argparse.Namespace():
         print 'usage'
         return 0
-    
+
     if len(res.files) < 2:
         print 'Need at least two files to merge'
         return 1
-   
+
     files = []
     for filename in res.files:
         file = LogFile(open(filename, 'r'))
@@ -176,4 +176,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
