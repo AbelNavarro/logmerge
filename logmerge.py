@@ -102,6 +102,12 @@ class LogFile:
                     return datetime.datetime.strptime(line[:19], '%Y-%m-%dT%H:%M:%S')
                 return _node
 
+            match = re.match(r'#(1?[0-9]{9})', line)
+            if match:
+                def _bash_history(line):
+                    return datetime.datetime.utcfromtimestamp(int(match.group(1)))
+                return _bash_history
+
             return None
 
 

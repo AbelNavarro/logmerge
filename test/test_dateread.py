@@ -52,3 +52,7 @@ class TestDateread(unittest.TestCase):
         self.assertDateRead('2016-07-18 08:11:56 -0700',
                             2016, 07, 18, 8, 11, 56, 000000)
 
+    def test_bash_history(self):
+        self.assertDateRead('#1478876044',
+                            2016, 11, 11, 14, 54, 04, 000000)
+
