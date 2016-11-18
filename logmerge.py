@@ -10,12 +10,18 @@ def parse_args(args):
     parser = argparse.ArgumentParser(
             description='logmerge - merge multiple log files chronologically',
             argument_default=argparse.SUPPRESS)
-    parser.add_argument('files', nargs='*', help='files to merge')
+
+    parser.add_argument('files', nargs='*', help='files to merge', default=[])
     parser.add_argument('-v', '--verbose', help='increase verbosity', action='count')
     parser.add_argument('-f', '--print_filename', type=int, help='print filename (printout length)')
     parser.add_argument('-l', '--print_linenum', help='print line number', action='store_true', default=False)
-    return parser.parse_args(args)
 
+    opts = parser.parse_args(args)
+
+    if len(opts.files) < 2:
+        parser.error('Need at least two files to merge')
+
+    return opts
 
 
 class LogFile:
@@ -148,14 +154,6 @@ class LogFile:
 
 def main():
     opts = parse_args(sys.argv[1:])
-
-    if opts == argparse.Namespace():
-        print 'usage'
-        return 0
-
-    if len(opts.files) < 2:
-        print 'Need at least two files to merge'
-        return 1
 
     files = []
     for filename in opts.files:
