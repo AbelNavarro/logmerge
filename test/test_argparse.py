@@ -1,22 +1,34 @@
 #!/usr/bin/python
 
-import unittest
 import argparse
+import sys
+import unittest
 
 from logmerge import parse_args
 
 
 class TestArgparse(unittest.TestCase):
+    def checkBuffered(self):
+        if not hasattr(sys.stderr, "getvalue"):
+            self.fail("need to run in buffered mode")
+
+
+    def assertInsufficientArgs(self, args):
+        self.checkBuffered()
+        with self.assertRaises(SystemExit) as exc_context:
+            opts = parse_args(args)
+        exc = exc_context.exception
+        self.assertEquals(exc.code, 2)
+        output = sys.stderr.getvalue().strip() # because stderr is an StringIO instance
+        self.assertRegexpMatches(output, "Need at least two files to merge")
+
 
     def test_empty(self):
-        opts = parse_args([])
-        self.assertEquals(opts, argparse.Namespace(print_linenum=False))
+        self.assertInsufficientArgs([])
 
 
     def test_onefile(self):
-        args = ['file']
-        opts = parse_args(args)
-        self.assertEquals(opts.files, args)
+        self.assertInsufficientArgs(['file'])
 
 
     def test_twofiles(self):
@@ -29,18 +41,14 @@ class TestArgparse(unittest.TestCase):
         flags = ['-v']
         files = ['file']
         args = flags + files
-        opts = parse_args(args)
-        self.assertEquals(opts.files, files)
-        self.assertEquals(opts.verbose, 1)
+        self.assertInsufficientArgs(args)
 
 
     def test_filenflag(self):
         flags = ['-v']
         files = ['file']
         args = files + flags
-        opts = parse_args(args)
-        self.assertEquals(opts.files, files)
-        self.assertEquals(opts.verbose, 1)
+        self.assertInsufficientArgs(args)
 
 
     def test_flagnfiles(self):
