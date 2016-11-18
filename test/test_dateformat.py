@@ -48,3 +48,7 @@ class TestDateformat(unittest.TestCase):
     def test_crowbar_join(self):
         self.assertDateReader('2016-07-18 08:11:56 -0700', '_crowbar_join')
 
+
+    def test_crowbar_join(self):
+        self.assertDateReader('#1478876044', '_bash_history')
+
