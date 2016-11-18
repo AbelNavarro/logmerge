@@ -54,7 +54,7 @@ class TestArgparse(unittest.TestCase):
 
     def test_filesnflag(self):
         flags = ['-v']
-        files = ['file']
+        files = ['file1', 'file2', 'file3', 'file4']
         args = files + flags
         opts = parse_args(args)
         self.assertEquals(opts.files, files)
