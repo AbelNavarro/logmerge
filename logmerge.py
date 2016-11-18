@@ -147,18 +147,18 @@ class LogFile:
 
 
 def main():
-    res = parse_args(sys.argv[1:])
+    opts = parse_args(sys.argv[1:])
 
-    if res == argparse.Namespace():
+    if opts == argparse.Namespace():
         print 'usage'
         return 0
 
-    if len(res.files) < 2:
+    if len(opts.files) < 2:
         print 'Need at least two files to merge'
         return 1
 
     files = []
-    for filename in res.files:
+    for filename in opts.files:
         file = LogFile(open(filename, 'r'))
         file.update()
         files.append(file)
@@ -166,10 +166,10 @@ def main():
     while files:
         files = sorted(files, key=lambda logfile: logfile.datetime)
         filename_length = 0
-        if 'print_filename' in res:
-            filename_length = res.print_filename
+        if 'print_filename' in opts:
+            filename_length = opts.print_filename
 
-        files[0].output(filename_length, res.print_linenum)
+        files[0].output(filename_length, opts.print_linenum)
         if not files[0].has_lines():
             del files[0]
 
